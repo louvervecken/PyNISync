@@ -1,21 +1,16 @@
 from ctypes import *
 
 # New types definitions
-# Correspondance between the name used in the NiDAQmx.h file and ctypes
-int8 = c_byte
-uInt8 = c_ubyte
-int16 = c_short
-uInt16 = c_ushort 
-int32 = c_int 
-uInt32 = c_uint 
-float32 = c_float 
-float64 = c_double 
-int64 =c_longlong 
-uInt64 = c_ulonglong 
-bool32 = uInt32 
-TaskHandle = uInt32
+# Correspondance between the name used in the niSync.h file and ctypes
+ViUInt16 = c_ushort
+ViInt16 = c_short
+ViUInt32 = c_ulong
+ViInt32 = c_long
+ViConstString = c_char_p
+ViRsrc = c_char_p
+ViReal64 = c_double
 
-# CFUNCTYPE defined in NIDAQmx.h
-DAQmxEveryNSamplesEventCallbackPtr = CFUNCTYPE(int32, TaskHandle, int32, uInt32, c_void_p)
-DAQmxDoneEventCallbackPtr = CFUNCTYPE(int32, TaskHandle, int32, c_void_p)
-DAQmxSignalEventCallbackPtr = CFUNCTYPE(int32, TaskHandle, int32, c_void_p)
+ViBoolean = ViUInt16
+ViSession = ViUInt32
+ViStatus = ViInt32
+ViAttr = ViUInt32

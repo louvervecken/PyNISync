@@ -9,9 +9,8 @@ if sys.platform.startswith('win'):
     if platform.release()=='7':
         dot_h_file = r'C:\Program Files (x86)\IVI Foundation\VISA\WinNT\include\niSync.h'
 
-    # Name (and eventually path) of the library
-    # Default on Windows is nicaiu
-    lib_name = "nicaiu"
+    # Name of the library
+    lib_name = "C:\Program Files (x86)\IVI Foundation\VISA\WinNT\lib\msc\niSync.lib"
 
 elif sys.platform.startswith('linux'):
     # On linux you can use the command find_library('nidaqmx')
