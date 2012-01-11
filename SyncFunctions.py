@@ -23,11 +23,11 @@ def catch_error(f):
         error = f(*arg)
         if error<0:
             errBuff = create_string_buffer(256)
-            niSync_error_message( None, error, errBuff)
+            error_message( 0, error, errBuff)
             raise SyncError(error,errBuff.value.decode("utf-8"), f.__name__)
         elif error>0:
             errBuff = create_string_buffer(256)
-            niSync_error_message ( None, error, errBuff);
+            error_message ( 0, error, errBuff);
             print("WARNING  :",error, "  ", errBuff.value.decode("utf-8"))
             raise SyncError(error,errBuff.value.decode("utf-8"))
 
