@@ -22,12 +22,12 @@ def catch_error(f):
     def mafunction(*arg):
         error = f(*arg)
         if error<0:
-            errBuff = create_string_buffer(2048)
-            niSync_error_message(errBuff,2048)
+            errBuff = create_string_buffer(256)
+            niSync_error_message( None, error, errBuff)
             raise SyncError(error,errBuff.value.decode("utf-8"), f.__name__)
         elif error>0:
-            errBuff = create_string_buffer(2048)
-            SyncmxGetErrorString (error, errBuff, 2048);
+            errBuff = create_string_buffer(256)
+            niSync_error_message ( None, error, errBuff);
             print("WARNING  :",error, "  ", errBuff.value.decode("utf-8"))
             raise SyncError(error,errBuff.value.decode("utf-8"))
 
@@ -78,7 +78,8 @@ include_file = open(dot_h_file,'r') #Open niSync.h file
 
 
 #fonction_parser = re.compile(r'.* (niSync_\S+)\s*\(((.|\r|\n)*)\);')
-fonction_parser = re.compile(r'.* (niSync_\S+)\s*\((.*)\);')
+fonction_parser = re.compile(r'.* niSync_(\S+)\s*\((.*)((\);)|(,\Z))')
+function_parser_arguments = re.compile(r'\s*(.*?)(,*)(\);)*\Z')
 
 type_list = ['ViUInt16','ViInt16','ViUInt32','ViInt32','ViConstString','ViRsrc','ViReal64','ViBoolean','ViSession','ViStatus','ViAttr']
 
@@ -110,22 +111,49 @@ def _define_function(name, arg_list, arg_name):
     # Record details of function
     function_dict[name] = {'arg_type':arg_list, 'arg_name':arg_name}
     # Fetch C function and apply argument checks
-    cfunc = getattr(Synclib, name)
+    cfunc = getattr(Synclib, "niSync_" + name)
     setattr(cfunc, 'argtypes', arg_list)
     # Create error-raising wrapper for C function and add to module's dict
     func = catch_error(cfunc)
     func.__name__ = name
-    func.__doc__ = '%s(%s) -> error.' % (name, ','.join(arg_name))
+    typeAndName=[]
+    for type_i, name_i in zip(arg_list, arg_name):
+        typeAndName.append(str(type_i).replace("class ", "") + ' ' + name_i)
+    func.__doc__ = '%s(%s) -> error.' % (name, ','.join(typeAndName))
     globals()[name] = func
 
 
+arg_string = ''
+functionContinuesOnNextLine = False
 
 for line in include_file:
+    functionParsed = False
     line = line[0:-1]
+    
     if '_VI_FUNC' in line and fonction_parser.match(line):
         name = fonction_parser.match(line).group(1)
         function_list.append(name)
         arg_string = fonction_parser.match(line).group(2)
+        #if goup 3 is a ',' then it means the function declaration continues on the next line
+        if ',' in fonction_parser.match(line).group(3):
+            functionContinuesOnNextLine = True
+            continue
+        elif ');' in fonction_parser.match(line).group(3):
+            functionContinuesOnNextLine = False
+            functionParsed = True
+        else:
+            print("Error parsing function " + name)
+
+    if function_parser_arguments.match(line) and functionContinuesOnNextLine:
+        arg_string = arg_string + ', ' + function_parser_arguments.match(line).group(1)
+        if ',' in function_parser_arguments.match(line).group(2):
+            functionContinuesOnNextLine = True
+            continue
+        else:
+            functionContinuesOnNextLine = False
+            functionParsed = True
+       
+    if functionParsed:
         arg_list=[]
         arg_name = []
         for arg in re.split(', ',arg_string):
@@ -135,6 +163,8 @@ for line in include_file:
                     arg_list.append(new_type)
                     arg_name.append(reg_expr_result.group(groug_nb))
                     break # break the for loop
+            else:
+                print("could not parse " + arg + "in function " + name)
         _define_function(name, arg_list, arg_name)
 
 include_file.close()

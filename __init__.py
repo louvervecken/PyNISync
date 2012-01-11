@@ -2,7 +2,7 @@
 
 from .SyncTypes import *
 from .SyncConstants import *
-#from .SyncFunctions import *
+from .SyncFunctions import *
 #from .Task import Task
 
 
