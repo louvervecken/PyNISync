@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{b06b1c05-c9ed-426b-93bd-5943604ad099}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>test.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>PySync</Name>
+    <RootNamespace>PySync</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <InterpreterId>9a7a9026-48c1-4688-9d5d-e5699d47d074</InterpreterId>
+    <InterpreterVersion>3.2</InterpreterVersion>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments />
+    <InterpreterPath />
+    <InterpreterArguments>-i</InterpreterArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Session.py" />
+    <Compile Include="SyncCallBack.py" />
+    <Compile Include="SyncConfig.py" />
+    <Compile Include="SyncConstants.py" />
+    <Compile Include="SyncFunctions.py" />
+    <Compile Include="SyncTypes.py" />
+    <Compile Include="test.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="__pycache__\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+</Project>
