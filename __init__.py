@@ -3,7 +3,7 @@
 from .SyncTypes import *
 from .SyncConstants import *
 from .SyncFunctions import *
-#from .Task import Task
+from .Session import Session
 
 
 __version_info__ = (1, 0, 0)

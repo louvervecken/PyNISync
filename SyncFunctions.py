@@ -78,7 +78,7 @@ include_file = open(dot_h_file,'r') #Open niSync.h file
 
 
 #fonction_parser = re.compile(r'.* (niSync_\S+)\s*\(((.|\r|\n)*)\);')
-fonction_parser = re.compile(r'.* niSync_(\S+)\s*\((.*)((\);)|(,\Z))')
+fonction_parser = re.compile(r'.* (niSync_\S+)\s*\((.*)((\);)|(,\Z))')
 function_parser_arguments = re.compile(r'\s*(.*?)(,*)(\);)*\Z')
 
 type_list = ['ViUInt16','ViInt16','ViUInt32','ViInt32','ViConstString','ViRsrc','ViReal64','ViBoolean','ViSession','ViStatus','ViAttr']
@@ -111,7 +111,7 @@ def _define_function(name, arg_list, arg_name):
     # Record details of function
     function_dict[name] = {'arg_type':arg_list, 'arg_name':arg_name}
     # Fetch C function and apply argument checks
-    cfunc = getattr(Synclib, "niSync_" + name)
+    cfunc = getattr(Synclib, name)
     setattr(cfunc, 'argtypes', arg_list)
     # Create error-raising wrapper for C function and add to module's dict
     func = catch_error(cfunc)
