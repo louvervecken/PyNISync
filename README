@@ -1,0 +1,5 @@
+This package provides an interface in Python for the NISync driver of National Instruments. 
+
+It is an adjustment of the PyDAQmx package from Pierre Clade "https://github.com/clade/PyDAQmx/"
+
+Not yet tested on harware, only in simulation.
